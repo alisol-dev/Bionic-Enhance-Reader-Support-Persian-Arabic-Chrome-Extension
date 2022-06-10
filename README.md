@@ -1,6 +1,10 @@
 # Bionic Reader (Bionic Enhance Reader)
 ![Large](https://user-images.githubusercontent.com/46472696/169700815-af3bac43-62ad-4d03-b7b4-c7305465eddc.png)
 
+## Sample usage
+Sample usage for web pages by adding bionicText.js and .bionicText class name:
+https://alisol.ir/Pojects/Bionic-Enhance-Reader-Support-Persian-Arabic/samples/1/index.php
+
 ## Description
 
 A Chrome Extension Used to Assist Your Reading Experience. Potentially increase your reading speed drastically by **bolding** certain charaters in a word.
