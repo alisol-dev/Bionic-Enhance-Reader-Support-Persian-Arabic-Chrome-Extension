@@ -1,47 +1,95 @@
-//We probably don't need Unit Test
-
-function ModifyTextBasic(textNodeContent) 
-{
+function ModifyTextBasic(textNodeContent) {
     return textNodeContent.split(' ').map((word) => {
-        //TODO if the user wants numbers to be bolded    
-        //if(/\d/.test(word)) return word;
 
-        
-        var boldUp2 = Math.floor(Math.random() * Math.floor(word.length/2)); //TODO Add customizable length: 1/4 , 1/2 , 3/4 of a word etc..
-        return word.replace(word, `<b>${word.substring(0, boldUp2+1)}</b>${word.substring(boldUp2+1)}`);  //TODO Add customizable fonts & underline the words that are originally bolded
+        var boldUp2 = Math.floor(0.5 * Math.floor(word.length / 2));
+        let firstHalf = word.substring(0, boldUp2 + 1);
+        let secondHalf = word.substring(boldUp2 + 1);
+
+        let firstHalfSuffix = "";
+        let secondHalfPreffix = "";
+        let lastCharOfArabicWord = getLastCharOfArabicWord(firstHalf);
+        let firstCharOfArabicWord = getFirstCharOfArabicWord(secondHalf);
+        if (doesArabicCharNeedSuffixJoiner(lastCharOfArabicWord) == true && doesArabicCharNeedPreffixJoiner(firstCharOfArabicWord) == true) {
+            firstHalfSuffix = "\u200D";
+            secondHalfPreffix = "\u200D";
+        }
+
+        return word.replace(word, `<b>${firstHalf}${firstHalfSuffix}</b>${secondHalfPreffix}${secondHalf}`);
     });
 }
 
-function ModifyTextSyllable(textNodeContent) 
-{
-    return textNodeContent.split(' ').map((word) => {
-        //if(/\d/.test(word)) return word;
-
-        var vowel = /[aeiouy]/i;
-        var match = vowel.exec(word);
-        if(match != null)
-            var boldUp2 = match.index;
-        return word.replace(word, `<b>${word.substring(0, boldUp2+1)}</b>${word.substring(boldUp2+1)}`);
-    });
+function getLastCharOfArabicWord(word) {
+    let len = word.length;
+    let lastChar = word.charAt(len - 1);
+    return lastChar;
 }
 
-function ModifyWebPage()
-{
+function getFirstCharOfArabicWord(word) {
+    let firstChar = word.charAt(0);
+    return firstChar;
+}
+
+function doesArabicCharNeedSuffixJoiner(char) {
+    let arabicCharsNeedingSuffixJoiner = ["ء",
+        "أ",
+        "ب",
+        "پ",
+        "ت",
+        "ث",
+        "ج",
+        "چ",
+        "ح",
+        "خ",
+        "س",
+        "ش",
+        "ص",
+        "ض",
+        "ط",
+        "ظ",
+        "ع",
+        "غ",
+        "ف",
+        "ق",
+        "ک",
+        "گ",
+        "ل",
+        "م",
+        "ن",
+        "ه",
+        "ی"
+    ];
+
+    if (arabicCharsNeedingSuffixJoiner.includes(char)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function doesArabicCharNeedPreffixJoiner(char) {
+    // all arabic chars needs preffix joiner.
+    var arabic = /[\u0600-\u06FF]/;
+    if (arabic.test(char)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function ModifyWebPage() {
     const domParser = new DOMParser();
-    var allText = [... document.getElementsByTagName('p')];         //TODO replace this with customizable Tags
+//     var allText = [...document.querySelectorAll('.bionicText > *:is(h1,h2,h3,h4,h5,h6,p), .bionicText:is(h1,h2,h3,h4,h5,h6,p)')]; // for custom using in a html page
+    var allText = [... document.querySelectorAll('h1,h2,h3,h4,h5,h6,p')]; // for browser extension
     allText.forEach(element => {
         var text = domParser.parseFromString(element.innerHTML, "text/html");
         var textNodeCollection = Array.from(text.body.childNodes).map((node) => {
-                                                                if(node.nodeType === Node.TEXT_NODE)
-                                                                    return ModifyTextBasic(node.textContent).join(' '); //Change this to ModifyTextSyllable when changing algorithm
-                                                                else
-                                                                    return node.outerHTML;})
+            if (node.nodeType === Node.TEXT_NODE)
+                return ModifyTextBasic(node.textContent).join(' ');
+            else
+                return node.outerHTML;
+        })
         element.innerHTML = textNodeCollection.join('');
     });
 }
 
 ModifyWebPage();
-
-
-
-
