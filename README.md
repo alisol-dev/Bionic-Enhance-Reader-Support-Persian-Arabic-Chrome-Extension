@@ -3,7 +3,7 @@
 
 ## Demo sample usage
 Sample usage for web pages by adding bionicText.js and .bionicText class name:
-https://alisol.ir/Pojects/Bionic-Enhance-Reader-Support-Persian-Arabic/samples/1/index.php
+https://alisol.ir/Projects/Bionic-Enhance-Reader-Support-Persian-Arabic/samples/1/index.php
 
 ## + Wordpress plugin
 Also you can use it as a wordpress plugin on your website: https://github.com/alisol-dev/Bionic-Enhance-Reader-Support-Persian-Arabic-WP-Plugin
